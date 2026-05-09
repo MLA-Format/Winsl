@@ -36,29 +36,47 @@ param (
     [string]$Path
 )
 
+# region backupWinget
 # This function creates a backup of winget using the winget export feature.
 function backupWinget {
 
 }
+# endregion
 
+
+# region restoreWinget
 # This function restores winget apps using a exported winget json file from a backup.
 function restoreWinget {
 
 }
+# endregion
 
+
+# region backupAppsList
 # This function backs up a list of all non-winget apps as a text file.
 function backupAppsList {
 
 }
+#endregion
 
+# region backup
 # This function creates a backup folder at the inputted folder path.
 function backup {
+    # Function parameters.
+    param(
+        [string]$Destination
+    )
 
+    $datestamp = Get-Date -Format "MM/dd/yyyy"
+    $backupPath = Join-Path -Path $Destination -ChildPath "Backup_$datestamp"
 }
+# endregion
 
+# region restore
 # This function restores a backup from the inputted folder path.
 function restore {
 
 }
+# endregion
 
 Write-Output "END OF PROGRAM"
