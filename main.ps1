@@ -34,5 +34,31 @@ param (
 
     [Parameter(Mandatory)]
     [string]$Path
-
 )
+
+# This function creates a backup of winget using the winget export feature.
+function backupWinget {
+
+}
+
+# This function restores winget apps using a exported winget json file from a backup.
+function restoreWinget {
+
+}
+
+# This function backs up a list of all non-winget apps as a text file.
+function backupAppsList {
+
+}
+
+# This function creates a backup folder at the inputted folder path.
+function backup {
+
+}
+
+# This function restores a backup from the inputted folder path.
+function restore {
+
+}
+
+Write-Output "END OF PROGRAM"
