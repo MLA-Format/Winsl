@@ -22,3 +22,17 @@
 .EXAMPLE
     BackupUtil -Restore -Path "D:\Backups\Backup_2025-01-15_120000"
 #>
+
+# Defining input parameters.
+param (
+
+    [Parameter(ParameterSetName = "Backup", Mandatory)]
+    [switch]$Backup,
+
+    [Parameter(ParameterSetName= "Restore", Mandatory)]
+    [switch]$Restore,
+
+    [Parameter(Mandatory)]
+    [string]$Path
+
+)
