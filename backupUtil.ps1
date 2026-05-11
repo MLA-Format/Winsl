@@ -32,7 +32,7 @@ param (
     [Parameter(ParameterSetName = "Backup", Mandatory)]
     [switch]$Backup,
 
-    [Parameter(ParameterSetName= "Restore", Mandatory)]
+    [Parameter(ParameterSetName = "Restore", Mandatory)]
     [switch]$Restore,
 
     [Parameter(Mandatory)]
@@ -53,7 +53,7 @@ function backupWinget {
     winget export -o $wingetBackupPath
 
     if ($LASTEXITCODE -ne 0) {
-        Write-Error "winget export failed with exit code $LASTEXITCODE"
+        Write-Error "Winget export failed with exit code $LASTEXITCODE"
         return
     }
 }
@@ -67,19 +67,12 @@ function restoreWinget {
     winget import -i $wingetRestorePath
 
     if ($LASTEXITCODE -ne 0) {
-        Write-Error "winget import failed with exit code $LASTEXITCODE"
+        Write-Error "Winget import failed with exit code $LASTEXITCODE"
         return
     }
 }
 #endregion
 
-
-#region backupAppsList
-#This function backs up a list of all non-winget apps as a text file.
-function backupAppsList {
-
-}
-#endregion
 
 #region backup
 #This function creates a backup folder at the inputted folder path.
@@ -114,7 +107,8 @@ function restore {
             $env:PATH + ";$MyFilesPath\scripts",
             [System.EnvironmentVariableTarget]::User
         )
-    } else {
+    }
+    else {
         Write-Error "No backup folder found."
         return
     }
@@ -124,8 +118,9 @@ function restore {
 #region Main
 if ($Backup) {
     backup
-} elseif ($Restore) {
+}
+elseif ($Restore) {
     restore
 }
-Write-Output "END OF PROGRAM"
+Write-Output "Backup complete."
 #endregion
