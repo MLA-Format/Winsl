@@ -33,7 +33,10 @@ param (
     [switch]$Restore,
 
     [Parameter(Mandatory)]
-    [string]$Path
+    [string]$Path,
+
+    [Parameter(Mandatory)]
+    [string]$MyFilesPath
 )
 
 #region backupWinget
@@ -88,6 +91,9 @@ function backup {
     New-Item -Path $backupPath -ItemType Directory
 
     backupWinget -Path $backupPath
+
+    $myFilesBackupPath = Join-Path -Path $backupPath -ChildPath "myFiles.zip"
+    Compress-Archive -Path $MyFilesPath -DestinationPath $myFilesBackupPath -CompressionLevel Optimal
 }
 #endregion
 
@@ -96,6 +102,9 @@ function backup {
 function restore {
     if (Test-Path $Path) {
         restoreWinget
+
+        $myFileBackupPath = Join-Path -Path $Path -ChildPath "myFiles.zip"
+        Expand-Archive -Path $myFileBackupPath -DestinationPath $MyFilesPath
     } else {
         Write-Error "No backup folder found."
         return
@@ -104,5 +113,10 @@ function restore {
 #endregion
 
 #region Main
+if ($Backup) {
+    bakcup
+} elseif ($Restore) {
+    restore
+}
 Write-Output "END OF PROGRAM"
 #endregion
