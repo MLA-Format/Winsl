@@ -16,11 +16,14 @@
 .PARAMETER Path
     Acts as the source for a restore or the destination for a backup.
 
+.PARAMETER MyFilesPath
+    Acts as the source or destination where the my folder will be placed.
+
 .EXAMPLE
-    BackupUtil -Backup -Path "D:\Backups"
+    BackupUtil -Backup -Path "D:\Backups" -MyFilesPath "E:\myFiles"
  
 .EXAMPLE
-    BackupUtil -Restore -Path "D:\Backups\Backup_2025-01-15_120000"
+    BackupUtil -Restore -Path "D:\Backups\Backup_2025-01-15_120000" -MyFilesPath "D:\Users\myuser\myFolder"
 #>
 
 #Defining input parameters.
@@ -105,6 +108,12 @@ function restore {
 
         $myFileBackupPath = Join-Path -Path $Path -ChildPath "myFiles.zip"
         Expand-Archive -Path $myFileBackupPath -DestinationPath $MyFilesPath
+
+        [System.Environment]::SetEnvironmentVariable(
+            "PATH",
+            $env:PATH + ";$MyFilesPath\scripts",
+            [System.EnvironmentVariableTarget]::User
+        )
     } else {
         Write-Error "No backup folder found."
         return
@@ -114,7 +123,7 @@ function restore {
 
 #region Main
 if ($Backup) {
-    bakcup
+    backup
 } elseif ($Restore) {
     restore
 }
