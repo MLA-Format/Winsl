@@ -39,7 +39,8 @@ param (
 # region backupWinget
 # This function creates a backup of winget using the winget export feature.
 function backupWinget {
-    winget export -o $Path
+    $wingetBackupPath = Join-Path -Path $Path -ChildPath wingetBackup.json
+    winget export -o $wingetBackupPath
 
     if ($LASTEXITCODE -ne 0) {
         Write-Error "winget export failed with exit code $LASTEXITCODE"
@@ -52,7 +53,8 @@ function backupWinget {
 # region restoreWinget
 # This function restores winget apps using a exported winget json file from a backup.
 function restoreWinget {
-    
+    $wingetRestorePath = Join-Path -Path $Path -ChildPath wingetBackup.json
+    winget import -i $wingetRestorePath
 }
 # endregion
 
