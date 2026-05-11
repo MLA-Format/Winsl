@@ -23,7 +23,7 @@
     BackupUtil -Restore -Path "D:\Backups\Backup_2025-01-15_120000"
 #>
 
-# Defining input parameters.
+#Defining input parameters.
 param (
 
     [Parameter(ParameterSetName = "Backup", Mandatory)]
@@ -36,8 +36,8 @@ param (
     [string]$Path
 )
 
-# region backupWinget
-# This function creates a backup of winget using the winget export feature.
+#region backupWinget
+#This function creates a backup of winget using the winget export feature.
 function backupWinget {
     param (
         [string]$Path
@@ -51,11 +51,11 @@ function backupWinget {
         return
     }
 }
-# endregion
+#endregion
 
 
-# region restoreWinget
-# This function restores winget apps using a exported winget json file from a backup.
+#region restoreWinget
+#This function restores winget apps using a exported winget json file from a backup.
 function restoreWinget {
     $wingetRestorePath = Join-Path -Path $Path -ChildPath wingetBackup.json
     winget import -i $wingetRestorePath
@@ -65,18 +65,18 @@ function restoreWinget {
         return
     }
 }
-# endregion
+#endregion
 
 
-# region backupAppsList
-# This function backs up a list of all non-winget apps as a text file.
+#region backupAppsList
+#This function backs up a list of all non-winget apps as a text file.
 function backupAppsList {
 
 }
 #endregion
 
-# region backup
-# This function creates a backup folder at the inputted folder path.
+#region backup
+#This function creates a backup folder at the inputted folder path.
 function backup {
     $datestamp = Get-Date -Format "MM-dd-yyyy"
     $backupPath = Join-Path -Path $Path -ChildPath "Backup_$datestamp"
@@ -89,10 +89,10 @@ function backup {
 
     backupWinget -Path $backupPath
 }
-# endregion
+#endregion
 
-# region restore
-# This function restores a backup from the inputted folder path.
+#region restore
+#This function restores a backup from the inputted folder path.
 function restore {
     if (Test-Path $Path) {
         restoreWinget
@@ -101,6 +101,8 @@ function restore {
         return
     }
 }
-# endregion
+#endregion
 
+#region Main
 Write-Output "END OF PROGRAM"
+#endregion
