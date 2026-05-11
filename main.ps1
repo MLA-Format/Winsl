@@ -33,7 +33,7 @@ param (
     [switch]$Restore,
 
     [Parameter(Mandatory)]
-    [string]$ParentPath
+    [string]$Path
 )
 
 # region backupWinget
@@ -57,10 +57,6 @@ function backupWinget {
 # region restoreWinget
 # This function restores winget apps using a exported winget json file from a backup.
 function restoreWinget {
-    param (
-        [string]$Path
-    )
-
     $wingetRestorePath = Join-Path -Path $Path -ChildPath wingetBackup.json
     winget import -i $wingetRestorePath
 
@@ -82,13 +78,8 @@ function backupAppsList {
 # region backup
 # This function creates a backup folder at the inputted folder path.
 function backup {
-    # Function parameters.
-    param(
-        [string]$Destination
-    )
-
     $datestamp = Get-Date -Format "MM-dd-yyyy"
-    $backupPath = Join-Path ParentPath $Destination -ChildPath "Backup_$datestamp"
+    $backupPath = Join-Path -Path $Path -ChildPath "Backup_$datestamp"
  
     if (Test-Path $backupPath) {
         Remove-Item -Path $backupPath -Recurse -Force
@@ -96,14 +87,19 @@ function backup {
 
     New-Item -Path $backupPath -ItemType Directory
 
-    restoreWinget -Path $backupPath
+    backupWinget -Path $backupPath
 }
 # endregion
 
 # region restore
 # This function restores a backup from the inputted folder path.
 function restore {
-
+    if (Test-Path $Path) {
+        restoreWinget
+    } else {
+        Write-Error "No backup folder found."
+        return
+    }
 }
 # endregion
 
