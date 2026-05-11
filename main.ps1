@@ -33,12 +33,16 @@ param (
     [switch]$Restore,
 
     [Parameter(Mandatory)]
-    [string]$Path
+    [string]$ParentPath
 )
 
 # region backupWinget
 # This function creates a backup of winget using the winget export feature.
 function backupWinget {
+    param (
+        [string]$Path
+    )
+
     $wingetBackupPath = Join-Path -Path $Path -ChildPath wingetBackup.json
     winget export -o $wingetBackupPath
 
@@ -53,8 +57,17 @@ function backupWinget {
 # region restoreWinget
 # This function restores winget apps using a exported winget json file from a backup.
 function restoreWinget {
+    param (
+        [string]$Path
+    )
+
     $wingetRestorePath = Join-Path -Path $Path -ChildPath wingetBackup.json
     winget import -i $wingetRestorePath
+
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "winget import failed with exit code $LASTEXITCODE"
+        return
+    }
 }
 # endregion
 
@@ -74,8 +87,16 @@ function backup {
         [string]$Destination
     )
 
-    $datestamp = Get-Date -Format "MM/dd/yyyy"
-    $backupPath = Join-Path -Path $Destination -ChildPath "Backup_$datestamp"
+    $datestamp = Get-Date -Format "MM-dd-yyyy"
+    $backupPath = Join-Path ParentPath $Destination -ChildPath "Backup_$datestamp"
+ 
+    if (Test-Path $backupPath) {
+        Remove-Item -Path $backupPath -Recurse -Force
+    }
+
+    New-Item -Path $backupPath -ItemType Directory
+
+    restoreWinget -Path $backupPath
 }
 # endregion
 
