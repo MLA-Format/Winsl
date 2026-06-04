@@ -89,7 +89,7 @@ function backup {
     backupWinget -Path $backupPath
 
     $myFilesBackupPath = Join-Path -Path $backupPath -ChildPath "myFiles.tar.gz"
-    tar -hczf $myFilesBackupPath $MyFilesPath
+    tar -vhczf $myFilesBackupPath -C $MyFilesPath .
 
     $myInstalledAppsPath = Join-Path -Path $backupPath -ChildPath "installedApps.txt"
     Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Select DisplayName | Sort-Object DisplayName > $myInstalledAppsPath
